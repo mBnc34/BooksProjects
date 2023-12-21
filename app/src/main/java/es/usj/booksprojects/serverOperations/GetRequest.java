@@ -3,9 +3,12 @@ package es.usj.booksprojects.serverOperations;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import es.usj.booksprojects.model.Book;
+import es.usj.booksprojects.serverOperations.apiService.AuthorApiService;
 import es.usj.booksprojects.serverOperations.apiService.BookApiService;
+import es.usj.booksprojects.serverOperations.callback.AuthorGetRequestCallback;
 import es.usj.booksprojects.serverOperations.callback.BookGetRequestCallback;
 import es.usj.booksprojects.serverOperations.callback.ImageBookGetRequestCallback;
+import es.usj.booksprojects.serverOperations.valueApi.AuthorsApiResponse;
 import es.usj.booksprojects.serverOperations.valueApi.BooksApiResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -27,6 +30,15 @@ public class GetRequest {
         BookApiService apiService = retrofit.create(BookApiService.class);
         Call<BooksApiResponse> call = apiService.getBooks(searchName,5);
 
+        call.enqueue(callback);
+    }
+    public void retrAuthors(String searchName, AuthorGetRequestCallback callback){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        AuthorApiService apiService = retrofit.create(AuthorApiService.class);
+        Call<AuthorsApiResponse> call = apiService.getAuthors(searchName, 3);
         call.enqueue(callback);
     }
 
